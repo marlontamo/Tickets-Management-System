@@ -64,3 +64,16 @@
     border-radius: 5px;
     color: #fff;
 }
+.tms-text-center{
+    text-align: center;
+}
+.tms-container .btn-update{
+    display: inline-block;
+    background-color: #ff5e00;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none; 
+}

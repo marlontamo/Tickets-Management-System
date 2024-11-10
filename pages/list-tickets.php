@@ -21,7 +21,7 @@ $bookListTableObject->prepare_items();
    <?php 
 
        // To add search box
-       $bookListTableObject->search_box("Search Books", "search_books");
+       $bookListTableObject->search_box("Search Ticket", "search_ticket");
 
        // To display table
        $bookListTableObject->display();

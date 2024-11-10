@@ -15,9 +15,9 @@
 
         <div class="form-input">
 
-            <label for="book_name">Name</label>
+            <label for="ticker_name">Ticket Name</label>
 
-            <input type="text" required name="book_name" id="book_name" placeholder="Enter name" class="form-group">
+            <input type="text" required name="ticket_name" id="ticket_name" placeholder="Enter name" class="form-group">
         </div>
 
         <div class="form-input">
@@ -30,9 +30,9 @@
 
         <div class="form-input">
 
-            <label for="book_price">Book Price</label>
+            <label for="ticket_price">Ticket Price</label>
 
-            <input type="text" name="book_price" id="book_price" placeholder="Enter price" class="form-group">
+            <input type="text" name="ticket_price" id="ticket_price" placeholder="Enter price" class="form-group">
         </div>
 
         <div class="form-input">

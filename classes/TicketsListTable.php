@@ -37,7 +37,7 @@ class TicketsListTable extends WP_List_Table{
 
             // Books on limit
             $books = $wpdb->get_results("
-            SELECT * FROM {$tablePrefix}ticketss_system 
+            SELECT * FROM {$tablePrefix}tickets_system 
             WHERE name LIKE '%{$search}%' OR author LIKE '%{$search}%'
             ORDER BY {$orderBy} {$order} 
             LIMIT {$offset}, {$per_page}", 
@@ -78,11 +78,11 @@ class TicketsListTable extends WP_List_Table{
         $columns = [
             "cb" => '<input type="checkbox" />',
             "id" => "ID",
-            "name" => "Book Name",
+            "name" => "Ticket Name",
             "author" => "Author Name",
-            "profile_image" => "Book Cover",
-            "book_price" => "Book Cost",
-            "created_at" => "Created at"
+            "profile_image" => "Ticket Cover",
+            "ticket_price" => "Ticket Cost",
+            "created_at" => "Created at",
         ];
 
         return $columns;
@@ -91,14 +91,14 @@ class TicketsListTable extends WP_List_Table{
     // No data found
     public function no_items(){
 
-        echo "No Book(s) Found";
+        echo "No Ticket(s) Found";
     }
 
     // To display data
-    public function column_default($singleBook, $col_name){
+    // public function column_default($singleBook, $col_name){
 
-        return isset($singleBook[$col_name]) ? $singleBook[$col_name] : "N/A";
-    }
+    //     return isset($singleBook[$col_name]) ? $singleBook[$col_name] : "N/A";
+    // }
 
     // Add Sorting Icons
     public function get_sortable_columns(){
@@ -122,5 +122,21 @@ class TicketsListTable extends WP_List_Table{
 
         return '<img src="'.$book['profile_image'].'" height="100px" width="100px"/>';
     }
-
+    public function column_default($item, $column_name) {
+        switch ($column_name) {
+            case 'id':
+                $actions = [];
+                $actions['edit'] = '<a href="' . admin_url('admin.php?page=edit-ticket-system&action=edit&id=' . $item['id']) . '">Edit</a>';
+                $actions['delete'] = '<a href="' . wp_nonce_url(admin_url('admin.php?page=delete-ticket-system&action=delete&id=' . $item['id']), 'delete_item_' . $item['id']) . '" onclick="return confirm(\'Are you sure you want to delete this item? This will Permanently Delete this Ticket\');">Delete</a>';
+                return sprintf('%1$s %2$s', $item['id'], $this->row_actions($actions));
+            case 'name':
+            case 'author':
+            case 'profile_image':
+            case 'ticket_price':
+            case 'created_at':
+                return $item[$column_name];
+            default:
+                return print_r($item, true); // For debugging
+        }
+    }
 }

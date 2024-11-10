@@ -1,0 +1,1 @@
+<h1>Ticket ID: <?php echo $_GET['id']?> was successfully Deleted...</h1>

@@ -20,9 +20,39 @@ class ticketsManagement {
 
         add_submenu_page("tickets-system", "Add ticket Page", "Add Ticket", "manage_options", "tickets-system", array($this, "tmsAddBookHandler"));
 
-        add_submenu_page("tickets-system", "List Tickets Page", "List Tickets", "manage_options", "list-books", array($this, "tmsListBooksHandler"));
+        add_submenu_page("tickets-system", "List Tickets Page", "List Tickets", "manage_options", "list-tickets", array($this, "tmsListBooksHandler"));
+        add_submenu_page("tickets-system", "Edit ticket Page", "edit Ticket", "manage_options", "edit-ticket-system", array($this, "tmsEditTicket"));
+        add_submenu_page("tickets-system", " ", "", "manage_options", "delete-ticket-system", array($this, "tmsDeleteTicket"));
     }
+    public function tmsDeleteTicket(){
+        $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
+        if (empty($id)) {
+            // Handle error: Ticket ID is missing
+            wp_die('Invalid ticket ID.');
+        }
+    
+        global $wpdb;
+        $query = $wpdb->prepare("DELETE FROM {$wpdb->prefix}tickets_system WHERE ID = %d", $id);
+    
+        if ($wpdb->query($query)) {
+            // Ticket deleted successfully
+            ob_start();
+            include_once TMS_PLUGIN_PATH .'pages/delete-ticket.php';
+            $content = ob_get_contents();
+            exit;
+        } else {
+            // Error deleting ticket
+            wp_die('Error deleting ticket.');
+        }
+    }
+    public function tmsEditTicket(){
+        
+        ob_start();
+        include_once TMS_PLUGIN_PATH . 'pages/edit-ticket.php';
+        $content = ob_get_contents();
+        //echo $content;
+    }
     public function addBooksSystemHandler(){
 
         echo "This is a sample message";
@@ -52,22 +82,22 @@ class ticketsManagement {
         if( $_SERVER['REQUEST_METHOD'] == "POST" && isset($_REQUEST['btn_form_submit'])){
 
             // Sanitize
-            $book_name = sanitize_text_field($_REQUEST['book_name']);
-            $book_author = sanitize_text_field($_REQUEST['author_name']);
-            $book_price = sanitize_text_field($_REQUEST['book_price']);
-            $book_image = sanitize_text_field($_REQUEST['cover_image']);
+            $ticket_name = sanitize_text_field($_REQUEST['ticket_name']);
+            $ticket_author = sanitize_text_field($_REQUEST['author_name']);
+            $ticket_price = sanitize_text_field($_REQUEST['ticket_price']);
+            $ticket_image = sanitize_text_field($_REQUEST['cover_image']);
 
             // Insert data
             $wpdb->insert("{$tablePrefix}tickets_system", [
-                "name" => $book_name,
-                "author" => $book_author,
-                "book_price" => $book_price,
-                "profile_image" => $book_image
+                "name" => $ticket_name,
+                "author" => $ticket_author,
+                "ticket_price" => $ticket_price,
+                "profile_image" => $ticket_image
             ]);
 
-            $book_id = $wpdb->insert_id;
+            $ticket_id = $wpdb->insert_id;
 
-            if($book_id > 0){
+            if($ticket_id > 0){
 
                 $this->message = "Successfully, book has been created";
             }else{
@@ -103,7 +133,7 @@ class ticketsManagement {
             `name` varchar(120) NOT NULL,
             `author` varchar(120) NOT NULL,
             `profile_image` text,
-            `book_price` int DEFAULT NULL,
+            `ticket_price` int DEFAULT NULL,
             `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (`id`)
            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4';
