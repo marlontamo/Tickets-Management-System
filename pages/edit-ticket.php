@@ -1,6 +1,11 @@
 
 <?php
    $ticket_id= $_GET['id'];
+   $tname = $_POST['ticket_name'];
+   $tAname = $_POST['author_name'];
+   
+    echo $tname."<br>";
+    echo $tAname;
 
    function getTicket($id) {
     global $wpdb;
@@ -15,7 +20,6 @@ $ticket_name= getTicket($ticket_id)['name'];
 $ticket_author= getTicket($ticket_id)['author'];
 $ticket_price = getTicket($ticket_id)['ticket_price'];
 
-//print_r(getTicket($ticket_id));
 ?>
 <div class="tms-container">
 <h1 style="text-align: center;">Edit Ticket</h1>
@@ -37,8 +41,17 @@ $ticket_price = getTicket($ticket_id)['ticket_price'];
 
 <label for="ticker_name">Price</label>
 
-<input type="text"value="<?php echo $ticket_price;?>" required name="author_name" id="author_name" placeholder="Enter name" class="form-group tms-text-center">
+<input type="text"value="<?php echo $ticket_price;?>" required name="ticket_price" id="author_name" placeholder="Enter name" class="form-group tms-text-center">
 </div>
+<div class="form-input">
+
+            <label for="">Current Image</label>
+             <img src="<?php echo $img;?>" id="" alt="" width="100" height="100">
+            <!-- <input type="text" placeholder="" name="cover_image" id="cover_image" class="form-group" readonly> -->
+            <label for="">New Image</label>
+            <img src="" id="cover_image" alt="" width="100" height="100">
+            <button class="btn" id="btn-upload-cover" type="button">Upload Cover Image</button>
+        </div>
 <button type="submit" name="btn_form_submit" class="btn-update">Update</button>
 </form>
 </div>

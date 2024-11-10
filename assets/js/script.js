@@ -22,7 +22,7 @@ jQuery(function() {
     // Form validation
     jQuery("#frm-add-book").validate();
 
-    // Handle Media Uplaod Event
+    // Handle Media Upload Event
     jQuery("#btn-upload-cover").on("click", function(event) {
 
         event.preventDefault();
@@ -42,7 +42,7 @@ jQuery(function() {
             var attachment = mediaUploader.state().get("selection").first().toJSON();
 
             //console.log(attachment);
-            jQuery("#cover_image").val(attachment.url);
+            jQuery("#cover_image").attr("src",attachment.url);
         });
     });
 });
