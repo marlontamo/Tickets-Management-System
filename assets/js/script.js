@@ -42,7 +42,11 @@ jQuery(function() {
             var attachment = mediaUploader.state().get("selection").first().toJSON();
 
             //console.log(attachment);
-            jQuery("#cover_image").attr("src",attachment.url);
+            jQuery('#cover_image-input').val(attachment.url);
+            let hasImage = jQuery("#cover_image").attr("src",attachment.url);
+            if(hasImage){
+                console.log('has image source');
+            }
         });
     });
 });

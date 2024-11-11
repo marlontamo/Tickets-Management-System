@@ -19,11 +19,21 @@ class ticketsManagement {
         add_menu_page("Tickets Management System", "Tickets System", "manage_options", "tickets-system", array($this, "tmsAddBookHandler"), "dashicons-book-alt", 14);
 
         add_submenu_page("tickets-system", "Add ticket Page", "Add Ticket", "manage_options", "tickets-system", array($this, "tmsAddBookHandler"));
-
+         
         add_submenu_page("tickets-system", "List Tickets Page", "List Tickets", "manage_options", "list-tickets", array($this, "tmsListBooksHandler"));
-        add_submenu_page("tickets-system", "Edit ticket Page", "edit Ticket", "manage_options", "edit-ticket-system", array($this, "tmsEditTicket"));
+        add_submenu_page("tickets-system", "Edit ticket Page", "", "manage_options", "edit-ticket-system", array($this, "tmsEditTicket"));
         add_submenu_page("tickets-system", " ", "", "manage_options", "delete-ticket-system", array($this, "tmsDeleteTicket"));
+        add_submenu_page("tickets-system", "Settings ticket Page", "Ticket System Settings", "manage_options", "settings-ticket-system", array($this, "tmsTicketSettings"));
     }
+    //Plugin Settings Page  
+    public function tmsTicketSettings(){
+            ob_start();
+            include_once TMS_PLUGIN_PATH .'pages/settings-ticket.php';
+            $content = ob_get_contents();
+            
+
+    }
+    //Plugin Plugin delete CallBack
     public function tmsDeleteTicket(){
         $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
@@ -40,32 +50,61 @@ class ticketsManagement {
             ob_start();
             include_once TMS_PLUGIN_PATH .'pages/delete-ticket.php';
             $content = ob_get_contents();
+            ob_end_clean();
             exit;
         } else {
             // Error deleting ticket
             wp_die('Error deleting ticket.');
         }
     }
-    public function tmsEditTicket(){
-        
+    //Plugin Edit CallBack 
+    public function tmsEditTicket() {
+        if (isset($_POST['ticket_id'], $_POST['ticket_name'], $_POST['author_name'])) {
+            global $wpdb;
+    
+            $tid = intval($_POST['ticket_id']);
+            $tprice =intval($_POST['ticket_price']);
+            $tname = sanitize_text_field($_POST['ticket_name']);
+            $tAname = sanitize_text_field($_POST['author_name']);
+            $timage = sanitize_text_field($_POST['cover_image']);
+    
+            $query = $wpdb->prepare("UPDATE {$wpdb->prefix}tickets_system SET 
+                                     name = %s, author = %s, profile_image = %s, ticket_price = %d 
+                                      WHERE ID = %d", $tname, $tAname,$timage ,$tprice, $tid );
+    
+            if ($wpdb->query($query)) {
+                // Update successful
+                $this->message = "Ticket was Updated Successfully";
+                ob_start();
+        include_once TMS_PLUGIN_PATH . 'pages/edit-ticket.php';
+        $content = ob_get_contents();
+           
+            } else {
+                wp_die('Error deleting ticket.');
+                $this->message = "Failed to create ticket"; 
+            }
+                
+            
+        }
         ob_start();
         include_once TMS_PLUGIN_PATH . 'pages/edit-ticket.php';
         $content = ob_get_contents();
-        //echo $content;
+        
+        
     }
-    public function addBooksSystemHandler(){
+    // public function addBooksSystemHandler(){
 
-        echo "This is a sample message";
-    }
-
+    //     echo "This is a sample message";
+    // }
+    //Plugin Insert data CallBack
     public function tmsAddBookHandler(){
 
-        $this->saveBookData();
+        $this->saveTicketData();
 
         $response = $this->message;
 
-        //echo "<h3 class='bms-h3'>This is Add Book Page</h3>";
-        ob_start(); // PHP Buffer Start
+        
+        ob_start(); 
         include_once TMS_PLUGIN_PATH . 'pages/add-tickets.php'; // Read Content
         $content = ob_get_contents(); // Content stored in variable
         ob_end_clean(); // Buffer clean
@@ -73,7 +112,7 @@ class ticketsManagement {
         echo $content; // Content print
     }
 
-    private function saveBookData(){
+    private function saveTicketData(){
 
         global $wpdb;
 
