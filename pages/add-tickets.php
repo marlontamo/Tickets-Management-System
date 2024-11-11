@@ -39,7 +39,7 @@
 
             <label for="">Cover Image</label>
 
-            <input type="text" name="cover_image" id="cover_image" class="form-group" readonly>
+            <input type="text" name="cover_image" id="cover_image-input" class="form-group" readonly>
 
             <button class="btn" id="btn-upload-cover" type="button">Upload Cover Image</button>
         </div>

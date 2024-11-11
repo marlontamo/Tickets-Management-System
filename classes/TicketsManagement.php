@@ -67,7 +67,7 @@ class ticketsManagement {
             $tname = sanitize_text_field($_POST['ticket_name']);
             $tAname = sanitize_text_field($_POST['author_name']);
             $timage = sanitize_text_field($_POST['cover_image']);
-    
+         
             $query = $wpdb->prepare("UPDATE {$wpdb->prefix}tickets_system SET 
                                      name = %s, author = %s, profile_image = %s, ticket_price = %d 
                                       WHERE ID = %d", $tname, $tAname,$timage ,$tprice, $tid );
@@ -80,8 +80,8 @@ class ticketsManagement {
         $content = ob_get_contents();
            
             } else {
-                wp_die('Error deleting ticket.');
-                $this->message = "Failed to create ticket"; 
+                wp_die('Error Updating ticket.');
+                $this->message = "Failed to update the ticket"; 
             }
                 
             
